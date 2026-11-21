@@ -1,0 +1,9 @@
+{
+  "name": "go.xcf.ai",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Online Go: vs computer, same screen, or online multiplayer rooms on Cloudflare Workers + Durable Objects",
+  "scripts": { "dev": "wrangler dev", "deploy": "wrangler deploy", "test": "node --test test/*.test.mjs" },
+  "devDependencies": { "wrangler": "^4.0.0" }
+}

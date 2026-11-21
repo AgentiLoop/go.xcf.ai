@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Go — play online, vs computer or a friend · go.xcf.ai</title>
+<meta name="description" content="Free online Go (baduk / weiqi) in the browser: play the computer, a friend on the same screen, or anyone online with a room link. 9×9, 13×13 and 19×19. Built by AgentiLoop Agent!.">
+<meta property="og:title" content="Go · go.xcf.ai">
+<meta property="og:description" content="Play Go online: vs computer, hot-seat or online multiplayer. Built by AgentiLoop Agent!.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='44' fill='%23111'/><circle cx='36' cy='36' r='12' fill='%23555'/></svg>">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/"><span class="stone b"></span><span class="stone w"></span> Go</a>
+  <span class="by">by <a href="https://agentiloop.ai/#games" target="_blank" rel="noopener">AgentiLoop Agent!</a></span>
+</header>
+
+<main id="lobby" class="card lobby">
+  <h1>Play Go</h1>
+  <p class="lead">The 4,000-year-old board game. Surround more area than your opponent. Free, no sign-up.</p>
+  <div class="row">
+    <label>Board</label>
+    <div class="seg" id="size">
+      <button data-v="9">9×9</button><button data-v="13">13×13</button><button data-v="19" class="on">19×19</button>
+    </div>
+  </div>
+  <div class="modes">
+    <section>
+      <h2>🤖 vs Computer</h2>
+      <div class="seg" id="color"><button data-v="1" class="on">Play Black</button><button data-v="2">Play White</button></div>
+      <button class="go" id="startAI">Start</button>
+    </section>
+    <section>
+      <h2>👥 Same screen</h2>
+      <p>Two players take turns on this device.</p>
+      <button class="go" id="startLocal">Start</button>
+    </section>
+    <section>
+      <h2>🌐 Online</h2>
+      <p>Create a room and send the link to a friend.</p>
+      <button class="go" id="startOnline">Create room</button>
+      <form id="joinForm"><input id="joinCode" maxlength="8" placeholder="Room code" autocomplete="off"><button>Join</button></form>
+    </section>
+  </div>
+</main>
+
+<main id="game" class="game" hidden>
+  <div class="boardWrap"><canvas id="board"></canvas></div>
+  <aside class="card side">
+    <div id="mode" class="mode"></div>
+    <div id="status" class="status"></div>
+    <div class="caps">
+      <div><span class="stone b"></span> Black <b id="capB">0</b> captured <i id="onB"></i></div>
+      <div><span class="stone w"></span> White <b id="capW">0</b> captured <i id="onW"></i></div>
+    </div>
+    <div id="share" class="share" hidden>
+      Invite link <input id="shareLink" readonly><button id="copy">Copy</button>
+    </div>
+    <div class="btns">
+      <button id="pass">Pass</button>
+      <button id="undo">Undo</button>
+      <button id="resign">Resign</button>
+      <button id="again" hidden>New game</button>
+      <button id="lobbyBtn">Menu</button>
+    </div>
+    <label class="chk"><input type="checkbox" id="showTerr"> Show area</label>
+    <p class="rules">Area scoring, komi 6.5. Ko and suicide are not allowed. The game ends after two passes in a row.</p>
+  </aside>
+</main>
+
+<footer class="foot">Made with <a href="https://agentiloop.ai" target="_blank" rel="noopener">AgentiLoop Agent!</a> · <a href="https://github.com/AgentiLoop/go.xcf.ai" target="_blank" rel="noopener">Source</a> · Also: <a href="https://chess.xcf.ai">chess.xcf.ai</a></footer>
+<script type="module" src="/app.js"></script>
+</body>
+</html>
