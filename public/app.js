@@ -3,7 +3,7 @@ import { newGame, play, pass, resign, score, aiMove, BLACK, WHITE, EMPTY } from 
 const $ = id => document.getElementById(id);
 const canvas = $('board'), ctx = canvas.getContext('2d');
 let g = null, mode = null, humanColor = BLACK, history = [], ws = null, you = 0, online = { 1: false, 2: false }, hover = -1, size = 19, roomCode = null;
-const token = localStorage.goToken || (localStorage.goToken = crypto.randomUUID());
+const token = sessionStorage.goToken || (sessionStorage.goToken = crypto.randomUUID());
 
 function seg(id, cb) {
   $(id).addEventListener('click', e => {
