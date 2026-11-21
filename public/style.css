@@ -43,3 +43,5 @@ canvas#board { width: min(100%, calc(100vh - 120px)); aspect-ratio: 1; border-ra
 .rules { color: var(--muted); font-size: 12px; margin: 0; }
 .foot { text-align: center; color: var(--muted); font-size: 13px; padding: 16px; }
 @media (max-width: 820px) { .modes { grid-template-columns: 1fr; } .game { grid-template-columns: 1fr; padding: 0 10px 20px; } .side { position: static; } }
+
+[hidden] { display: none !important; }
