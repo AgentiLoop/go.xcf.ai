@@ -9,7 +9,7 @@ function seg(id, cb) {
   $(id).addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     for (const x of $(id).children) x.classList.toggle('on', x === b);
-    cb(+b.dataset.v);
+    cb(isNaN(+b.dataset.v) ? b.dataset.v : +b.dataset.v);
   });
 }
 seg('size', v => size = v);
