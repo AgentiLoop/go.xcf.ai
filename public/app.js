@@ -15,26 +15,30 @@ function seg(id, cb) {
 seg('size', v => size = v);
 seg('color', v => humanColor = v);
 
-function show(game) { $('lobby').hidden = game; $('game').hidden = !game; if (game) resize(); }
+function show() { resize(); }
+let selMode = 'ai';
+seg('modeSel', v => { selMode = v; $('aiOpts').hidden = v !== 'ai'; $('onlineOpts').hidden = v !== 'online'; });
 
 function start(m) {
   mode = m; g = newGame(size); history = []; you = 0;
-  $('share').hidden = true;
+  if (ws) { const w = ws; ws = null; w.close(); window.history.replaceState(null, '', '/'); }
+  $('shareLink').value = ''; $('copy').textContent = 'Copy';
   $('mode').textContent = m === 'ai' ? `vs Computer · you play ${humanColor === BLACK ? 'Black' : 'White'}` : 'Same screen · 2 players';
   show(true); render();
   if (m === 'ai' && humanColor === WHITE) setTimeout(aiTurn, 300);
 }
-$('startAI').onclick = () => start('ai');
-$('startLocal').onclick = () => start('local');
-$('startOnline').onclick = async () => { const { code } = await (await fetch('/api/room')).json(); joinRoom(code, true); };
+$('newGame').onclick = async () => {
+  if (selMode !== 'online') return start(selMode);
+  const { code } = await (await fetch('/api/room')).json(); joinRoom(code, true);
+};
 $('joinForm').onsubmit = e => { e.preventDefault(); const c = $('joinCode').value.trim().toUpperCase(); if (c) joinRoom(c); };
-$('lobbyBtn').onclick = () => { if (ws) ws.close(); ws = null; window.history.replaceState(null, '', '/'); show(false); };
 $('copy').onclick = () => { navigator.clipboard.writeText($('shareLink').value); $('copy').textContent = 'Copied'; };
 
 function joinRoom(code, creating) {
+  if (ws) { const w = ws; ws = null; w.close(); }
   mode = 'online'; roomCode = code; g = null;
   window.history.replaceState(null, '', '/r/' + code);
-  $('shareLink').value = location.origin + '/r/' + code; $('share').hidden = false; $('copy').textContent = 'Copy';
+  $('shareLink').value = location.origin + '/r/' + code; $('copy').textContent = 'Copy';
   $('mode').textContent = 'Online · room ' + code;
   show(true); setStatus('Connecting…');
   ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws/' + code);
@@ -46,8 +50,6 @@ function joinRoom(code, creating) {
   };
   ws.onclose = () => { if (mode === 'online' && ws) setStatus('Disconnected — reload to reconnect', true); };
 }
-const r = location.pathname.match(/^\/r\/([A-Z0-9]{4,8})$/);
-if (r) joinRoom(r[1]);
 
 function myTurn() {
   if (!g || g.over) return false;
@@ -83,7 +85,7 @@ $('undo').onclick = () => {
 $('again').onclick = () => mode === 'online' ? ws.send(JSON.stringify({ type: 'rematch' })) : start(mode);
 $('showTerr').onchange = render;
 
-function setStatus(t, err) { const s = $('status'); s.textContent = t; s.classList.toggle('err', !!err); }
+function setStatus(t, err) { const d = $('turnDot'); if (d && g) d.className = 'turn-dot ' + (g.over ? 'over' : g.turn === BLACK ? 'b' : 'w'); const s = $('status'); s.textContent = t; s.classList.toggle('err', !!err); }
 
 // ---------- drawing ----------
 let px = 0, cell = 0, margin = 0;
@@ -123,8 +125,8 @@ function render() {
   if (hover >= 0 && g.board[hover] === EMPTY && myTurn()) { const [x, y] = pos(hover); drawStone(x, y, g.turn, .45); }
 
   $('capB').textContent = g.captures[BLACK]; $('capW').textContent = g.captures[WHITE];
-  $('onB').textContent = mode === 'online' ? (online[BLACK] ? '● online' : '○ waiting') + (you === BLACK ? ' (you)' : '') : '';
-  $('onW').textContent = mode === 'online' ? (online[WHITE] ? '● online' : '○ waiting') + (you === WHITE ? ' (you)' : '') : '';
+  $('onB').textContent = mode === 'online' ? (online[BLACK] ? ' · online' : ' · waiting') + (you === BLACK ? ' (you)' : '') : '';
+  $('onW').textContent = mode === 'online' ? (online[WHITE] ? ' · online' : ' · waiting') + (you === WHITE ? ' (you)' : '') : '';
   $('undo').hidden = mode === 'online';
   $('again').hidden = !g.over;
   const name = c => c === BLACK ? 'Black' : 'White';
@@ -155,3 +157,7 @@ function pointAt(e) {
 canvas.addEventListener('mousemove', e => { const h = pointAt(e); if (h !== hover) { hover = h; render(); } });
 canvas.addEventListener('mouseleave', () => { hover = -1; render(); });
 canvas.addEventListener('click', e => { const i = pointAt(e); if (i >= 0 && myTurn()) act('move', i); });
+
+const r = location.pathname.match(/^\/r\/([A-Z0-9]{4,8})$/);
+if (r) { joinRoom(r[1]); for (const b of $('modeSel').children) b.classList.toggle('on', b.dataset.v === 'online'); selMode = 'online'; $('aiOpts').hidden = true; $('onlineOpts').hidden = false; }
+else start('ai');

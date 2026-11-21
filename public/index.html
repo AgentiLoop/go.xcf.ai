@@ -16,56 +16,33 @@
   <span class="by">by <a href="https://agentiloop.ai/#games" target="_blank" rel="noopener">AgentiLoop Agent!</a></span>
 </header>
 
-<main id="lobby" class="card lobby">
-  <h1>Play Go</h1>
-  <p class="lead">The 4,000-year-old board game. Surround more area than your opponent. Free, no sign-up.</p>
-  <div class="row">
-    <label>Board</label>
-    <div class="seg" id="size">
-      <button data-v="9">9×9</button><button data-v="13">13×13</button><button data-v="19" class="on">19×19</button>
-    </div>
-  </div>
-  <div class="modes">
-    <section>
-      <h2>🤖 vs Computer</h2>
-      <div class="seg" id="color"><button data-v="1" class="on">Play Black</button><button data-v="2">Play White</button></div>
-      <button class="go" id="startAI">Start</button>
-    </section>
-    <section>
-      <h2>👥 Same screen</h2>
-      <p>Two players take turns on this device.</p>
-      <button class="go" id="startLocal">Start</button>
-    </section>
-    <section>
-      <h2>🌐 Online</h2>
-      <p>Create a room and send the link to a friend.</p>
-      <button class="go" id="startOnline">Create room</button>
-      <form id="joinForm"><input id="joinCode" maxlength="8" placeholder="Room code" autocomplete="off"><button>Join</button></form>
-    </section>
-  </div>
-</main>
-
-<main id="game" class="game" hidden>
+<main id="game" class="game">
   <div class="boardWrap"><canvas id="board"></canvas></div>
   <aside class="card side">
-    <div id="mode" class="mode"></div>
-    <div id="status" class="status"></div>
-    <div class="caps">
-      <div><span class="stone b"></span> Black <b id="capB">0</b> captured <i id="onB"></i></div>
-      <div><span class="stone w"></span> White <b id="capW">0</b> captured <i id="onW"></i></div>
-    </div>
-    <div id="share" class="share" hidden>
-      Invite link <input id="shareLink" readonly><button id="copy">Copy</button>
-    </div>
-    <div class="btns">
-      <button id="pass">Pass</button>
-      <button id="undo">Undo</button>
-      <button id="resign">Resign</button>
-      <button id="again" hidden>New game</button>
-      <button id="lobbyBtn">Menu</button>
-    </div>
-    <label class="chk"><input type="checkbox" id="showTerr"> Show area</label>
-    <p class="rules">Area scoring, komi 6.5. Ko and suicide are not allowed. The game ends after two passes in a row.</p>
+    <section class="panel-now">
+      <div class="turn"><span id="turnDot" class="turn-dot b"></span><div><div id="status" class="status"></div><div id="mode" class="mode"></div></div></div>
+      <div class="caps">
+        <div class="cap"><span class="stone b"></span><div><b id="capB">0</b><small>captured by Black</small><i id="onB"></i></div></div>
+        <div class="cap"><span class="stone w"></span><div><b id="capW">0</b><small>captured by White</small><i id="onW"></i></div></div>
+      </div>
+      <div class="btns">
+        <button id="pass"><span>⏭</span>Pass</button>
+        <button id="undo"><span>↶</span>Undo</button>
+        <button id="resign" class="danger"><span>⚑</span>Resign</button>
+        <button id="again" hidden><span>↻</span>Rematch</button>
+      </div>
+      <label class="chk"><input type="checkbox" id="showTerr"> Show area</label>
+    </section>
+    <section class="panel-new">
+      <div class="panel-label">New game</div>
+      <div class="tabs" id="modeSel"><button data-v="ai" class="on"><span>🤖</span>Computer</button><button data-v="local"><span>👥</span>2 Players</button><button data-v="online"><span>🌐</span>Online</button></div>
+      <div class="seg" id="size"><button data-v="9">9×9</button><button data-v="13">13×13</button><button data-v="19" class="on">19×19</button></div>
+      <div id="aiOpts" class="opts"><div class="seg" id="color"><button data-v="1" class="on">⚫ Black</button><button data-v="2">⚪ White</button></div></div>
+      <div id="onlineOpts" class="opts" hidden><form id="joinForm"><input id="joinCode" maxlength="8" placeholder="Have a room code?" autocomplete="off"><button>Join</button></form></div>
+      <button class="go" id="newGame">Start new game</button>
+      <div class="share" id="share"><span class="share-ico">🔗</span><input id="shareLink" readonly placeholder="Invite link appears for online games"><button id="copy">Copy</button></div>
+      <p class="rules">Area scoring, komi 6.5. Ko and suicide not allowed. Two passes end the game.</p>
+    </section>
   </aside>
 </main>
 
