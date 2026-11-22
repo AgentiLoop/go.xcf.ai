@@ -1,5 +1,7 @@
 # ⚫⚪ go.xcf.ai — online Go
 
+🤖 **Made with [AgentiLoop Agent!](https://github.com/AgentiLoop/Agent)**, the autonomous AI agent for your Mac · 🌐 [agentiloop.ai](https://agentiloop.ai) · ▶️ **Play:** [go.xcf.ai](https://go.xcf.ai)
+
 Play Go (baduk / weiqi) in the browser at **https://go.xcf.ai**. Built by [AgentiLoop Agent!](https://agentiloop.ai).
 
 - **🤖 vs Computer:** play Black or White against a built-in heuristic player (captures, saving groups in atari, no self-atari, no filling its own eyes, 3rd/4th-line openings).
